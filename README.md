@@ -1,7 +1,8 @@
 > simple_shell > Team project
 
-Start -> Display prompt -> Read command line -> Check if command is a built-in (cd, exit, setenv, unsetenv, env, alias) -> If built-in, execute built-in -> If not built-in, check if command exists in PATH -> If command exists, fork and execute command -> Wait for child process to complete -> Display prompt -> Repeat
+<p> Start -> Display prompt -> Read command line -> Check if command is a built-in (cd, exit, setenv, unsetenv, env, alias) -> If built-in, execute built-in -> If not built-in, check if command exists in PATH -> If command exists, fork and execute command -> Wait for child process to complete -> Display prompt -> Repeat</p>
 
+<p>
 +------------------+                        +--------------------+
 |     Start        |                        |       End          |
 |                  |                        |                    |
@@ -35,3 +36,4 @@ Start -> Display prompt -> Read command line -> Check if command is a built-in (
 +------------------+                         +------------------+
 | Handle comments  |     +--------------->   | Handle file mode |
 +------------------+                         +------------------+
+</p>
