@@ -1,46 +1,48 @@
 #include "shell.h"
 
-int main(int argc, char *argv[]) {
-	char* line;
-	char** tokens;
-	int status;
-	char command[100];
-
-	while (1)
+int main(int argc, char** argv)
+{
+    if (argc > 2)
 	{
-		printf("$ ");
-        fflush(stdout);
-        if (fgets(command, sizeof(command), stdin) == NULL)
-            break; // end of file
-		if (argc == 2) {
-			// If a file is provided, read commands from file
-			FILE *fp = fopen(argv[1], "r");
-			if (fp == NULL) {
-				perror("Failed to open file");
-				exit(EXIT_FAILURE);
-			}
-
-			while ((line = fgets(line, MAX_INPUT_SIZE, fp)) != NULL) {
-				tokens = token_size(line);
-				execute(tokens);
-				free(line);
-				free(tokens);
-			}
-
-			fclose(fp);
-			exit(EXIT_SUCCESS);
-		}
-
-		while (1) {
-			// Read input and tokenize it
-			line = read_line();
-			tokens = token_size(line);
-
-			// Execute command and free memory
-			execute(tokens);
-			free(line);
-			free(tokens);
-		}
-	}
-		return 0;
+        fprintf(stderr, "Usage: %s [filename]\n", argv[0]);
+        return EXIT_FAILURE;
+    }
+    if (argc == 2)
+	{
+        FILE* fp = fopen(argv[1], "r");
+        if (fp == NULL)
+		{
+            perror(argv[1]);
+            return EXIT_FAILURE;
+        }
+        char buffer[BUFFER_SIZE];
+        while (fgets(buffer, BUFFER_SIZE, fp) != NULL)
+		{
+            char* command = strtok(buffer, "#");
+            if (command != NULL) {
+                char** args = parse_command(command);
+                if (args[0] != NULL)
+                    execute_command(args);
+                free(args);
+            }
+        }
+        fclose(fp);
+        return EXIT_SUCCESS;
+    }
+    while (1)
+	{
+        print_prompt();
+        char* command = read_command();
+        if (command == NULL)
+		{
+            printf("\n");
+            break;
+        }
+        char** args = parse_command(command);
+        if (args[0] != NULL)
+            execute_command(args);
+        free(args);
+        free(command);
+    }
+    return EXIT_SUCCESS;
 }
