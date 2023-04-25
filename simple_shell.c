@@ -1,31 +1,39 @@
-#include <stdio.h>
+#include "shell.h"
 
-/**
- * main - Entry point
- *
- * Return: Always 0 (Success)
- */
+int main(int argc, char *argv[]) {
+	char* line;
+	char** tokens;
+	int status;
 
-int main(void)
-{
-	int i;
+	if (argc == 2) {
+		// If a file is provided, read commands from file
+		FILE *fp = fopen(argv[1], "r");
+		if (fp == NULL) {
+			perror("Failed to open file");
+			exit(EXIT_FAILURE);
+		}
 
-	for (i = 1; i <= 100; i++)
-	{
-		if (i % 15 == 0)
-			printf("FizzBuzz");
-		else if (i % 3 == 0)
-			printf("Fizz");
-		else if (i % 5 == 0)
-			printf("Buzz");
-		else
-			printf("%d", i);
+		while ((line = fgets(line, MAX_INPUT_SIZE, fp)) != NULL) {
+			tokens = token_size(line);
+			execute(tokens);
+			free(line);
+			free(tokens);
+		}
 
-		if (i != 100)
-			printf(" ");
+		fclose(fp);
+		exit(EXIT_SUCCESS);
 	}
 
-	printf("\n");
+	while (1) {
+		// Read input and tokenize it
+		line = read_line();
+		tokens = token_size(line);
 
-	return (0);
+		// Execute command and free memory
+		execute(tokens);
+		free(line);
+		free(tokens);
+	}
+
+	return 0;
 }
