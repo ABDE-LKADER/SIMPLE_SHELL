@@ -1,6 +1,10 @@
 #include "shell.h"
 
-void print_prompt()
+/**
+ * print_prompt -> prints the prompt
+*/
+
+void print_prompt(void)
 {
-    printf("$ ");
+	printf("Simple_Shell > ");
 }

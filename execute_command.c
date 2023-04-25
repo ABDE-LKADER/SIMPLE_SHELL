@@ -1,19 +1,26 @@
 #include "shell.h"
 
-void execute_command(char** args)
+/**
+ * execute_command -> executes a command
+ *
+ * @args: Array Arguments
+*/
+
+void execute_command(char **args)
 {
-    pid_t pid = fork();
-    if (pid == -1)
+	pid_t pid = fork();
+
+	if (pid == -1)
 	{
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
 	else if (pid == 0)
 	{
-        execvp(args[0], args);
-        perror(args[0]);
-        exit(EXIT_FAILURE);
-    }
+		execvp(args[0], args);
+		perror(args[0]);
+		exit(EXIT_FAILURE);
+	}
 	else
-        wait(NULL);
+		wait(NULL);
 }
