@@ -11,7 +11,9 @@
 
 char** parse_command(char* command);
 void execute_command(char** args);
-char* read_command();
-void print_prompt();
+char* read_command(void);
+void print_prompt(void);
+void free_mal(char **args, char *command);
+void if_args(char **args);
 
 #endif

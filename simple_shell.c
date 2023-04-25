@@ -18,7 +18,6 @@ int main(int ac, char **av)
 	}
 	if (ac == 2)
 	{
-		char **args = parse_command(command);
 		FILE *fp = fopen(av[1], "r");
 
 		if (fp == NULL)
@@ -32,26 +31,24 @@ int main(int ac, char **av)
 
 			if (command != NULL)
 			{
-				if (args[0] != NULL)
-					execute_command(args);
+				char **args = parse_command(command);
+
+				if_args(args);
 				free(args);
 			}
 		} fclose(fp);
 		return (EXIT_SUCCESS);
-	}
-	while (1)
+	} while (1)
 	{
 		print_prompt();
 		char *command = read_command();
+		char **args = parse_command(command);
 
 		if (command == NULL)
 		{
 			printf("\n");
 			break;
-		} char **args = parse_command(command);
-		if (args[0] != NULL)
-			execute_command(args);
-		free(args);
-		free(command);
+		} if_args(args);
+		free_mal(args, command);
 	} return (EXIT_SUCCESS);
 }
