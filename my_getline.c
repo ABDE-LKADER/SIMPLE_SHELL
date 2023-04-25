@@ -64,13 +64,3 @@ char* my_getline() {
     len = 0;
   }
 }
-
-int main() {
-  char* line = NULL;
-  while ((line = my_getline()) != NULL) {
-    printf("You entered: %s", line);
-    free(line);
-  }
-  return 0;
-}
-
