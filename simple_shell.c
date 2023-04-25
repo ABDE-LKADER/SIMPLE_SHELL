@@ -1,5 +1,4 @@
 #include "shell.h"
-
 /**
  * main -> main function
  *
@@ -8,7 +7,6 @@
  *
  * Return: EXIT_SUCCESS or EXIT_FAILURE
 */
-
 int main(int ac, char **av)
 {
 	if (ac > 2)
