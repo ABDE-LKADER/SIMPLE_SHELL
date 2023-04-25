@@ -1,1 +1,1 @@
-simple_shell : Team project 
+> simple_shell : Team project
