@@ -3,35 +3,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#include <sys/stat.h>
-#include <signal.h>
-#include <string.h>
-#include <fcntl.h>
-#include <dirent.h>
 
-#define PROMPT "$ "
-#define DELIM " \n\t\r\a"
+#define BUFFER_SIZE 1024
+#define MAX_INPUT 1024
 #define MAXARGS 10
-#define MAXPATH 1024
+#define DELIM " \t\r\n\a"
 
-extern char **environ;
-
+void shell_loop(void);
 char *read_line(void);
 char **split_line(char *line);
 int execute(char **args);
-int launch(char **args);
-int cd(char **args);
-int setenv_cmd(char **args);
-int unsetenv_cmd(char **args);
-int printenv(char **args);
-int exit_cmd(char **args);
-char *replace_vars(char *line);
-int handle_operators(char **args, int result);
-int handle_semicolon(char **args);
-int handle_alias(char **args);
-int shell(char **args);
-void handler(int signum);
 
 #endif

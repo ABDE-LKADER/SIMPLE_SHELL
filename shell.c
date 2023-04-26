@@ -1,27 +1,17 @@
 #include "shell.h"
 
 /**
- * main - Entry point
+ * main -> Entry point
  *
- * Return: 0 on success, 1 on failure
- */
+ * @argc: Number of arguments
+ * @argv: Arguments
+ * @envp: Environment
+ *
+ * Return: EXIT_SUCCESS
+*/
 
-int main(void)
+int main(int argc, char **argv, char **envp)
 {
-	char *line;
-	char **args;
-	int status;
-
-	signal(SIGINT, handler);
-
-	do {
-		printf(PROMPT);
-		line = read_line();
-		args = split_line(line);
-		status = shell(args);
-		free(line);
-		free(args);
-	} while (status);
-
+	shell_loop();
 	return (EXIT_SUCCESS);
 }
