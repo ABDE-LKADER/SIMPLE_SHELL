@@ -1,64 +1,44 @@
 #include "shell.h"
 
 /**
- * main - Main function
- * @ac: Argument count
- * @av: Argument vector
+ * main - entry point
+ * @ac: arg count
+ * @av: arg vector
  *
- * Return: EXIT_SUCCESS or EXIT_FAILURE
+ * Return: 0 on success, 1 on error
  */
 int main(int ac, char **av)
 {
-	if (ac > 2)
-	{
-		fprintf(stderr, "Usage: %s [filename]\n", av[0]);
-		return (EXIT_FAILURE);
-	}
+	info_t info[] = { INFO_INIT };
+	int fd = 2;
+
+	asm ("mov %1, %0\n\t"
+		"add $3, %0"
+		: "=r" (fd)
+		: "r" (fd));
 
 	if (ac == 2)
 	{
-		FILE *fp = fopen(av[1], "r");
-
-		if (fp == NULL)
+		fd = open(av[1], O_RDONLY);
+		if (fd == -1)
 		{
-			perror(av[1]);
+			if (errno == EACCES)
+				exit(126);
+			if (errno == ENOENT)
+			{
+				_eputs(av[0]);
+				_eputs(": 0: Can't open ");
+				_eputs(av[1]);
+				_eputchar('\n');
+				_eputchar(BUF_FLUSH);
+				exit(127);
+			}
 			return (EXIT_FAILURE);
 		}
-
-		char buffer[BUFFER_SIZE];
-		while (fgets(buffer, BUFFER_SIZE, fp) != NULL)
-		{
-			char *command = strtok(buffer, "#");
-
-			if (command != NULL)
-			{
-				char **args = parse_command(command);
-
-				if_args(args);
-				free(args);
-			}
-		}
-
-		fclose(fp);
-		return (EXIT_SUCCESS);
+		info->readfd = fd;
 	}
-
-	while (1)
-	{
-		print_prompt();
-		char *command = read_command();
-		char **args = parse_command(command);
-
-		if (command == NULL)
-		{
-			printf("\n");
-			break;
-		}
-
-		if_args(args);
-		free_mal(args, command);
-	}
-
+	populate_env_list(info);
+	read_history(info);
+	hsh(info, av);
 	return (EXIT_SUCCESS);
 }
-
