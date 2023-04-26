@@ -12,6 +12,10 @@
 #define MAXARGS 10
 #define DELIM " \t\r\n\a"
 
+void put_string(char *str);
+char **re_alloc(char **ptr, unsigned int size);
+char *str_tok(char *str, char *delim);
+
 void shell_loop(void);
 char *read_line(void);
 char **split_line(char *line);
