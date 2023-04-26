@@ -1,14 +1,12 @@
 #include "shell.h"
 
 /**
- * main -> main function
- *
- * @ac: Arguments count
- * @av: Arguments vector
+ * main - Main function
+ * @ac: Argument count
+ * @av: Argument vector
  *
  * Return: EXIT_SUCCESS or EXIT_FAILURE
-*/
-
+ */
 int main(int ac, char **av)
 {
 	if (ac > 2)
@@ -16,6 +14,7 @@ int main(int ac, char **av)
 		fprintf(stderr, "Usage: %s [filename]\n", av[0]);
 		return (EXIT_FAILURE);
 	}
+
 	if (ac == 2)
 	{
 		FILE *fp = fopen(av[1], "r");
@@ -24,7 +23,9 @@ int main(int ac, char **av)
 		{
 			perror(av[1]);
 			return (EXIT_FAILURE);
-		} char buffer[BUFFER_SIZE];
+		}
+
+		char buffer[BUFFER_SIZE];
 		while (fgets(buffer, BUFFER_SIZE, fp) != NULL)
 		{
 			char *command = strtok(buffer, "#");
@@ -36,9 +37,13 @@ int main(int ac, char **av)
 				if_args(args);
 				free(args);
 			}
-		} fclose(fp);
+		}
+
+		fclose(fp);
 		return (EXIT_SUCCESS);
-	} while (1)
+	}
+
+	while (1)
 	{
 		print_prompt();
 		char *command = read_command();
@@ -48,7 +53,12 @@ int main(int ac, char **av)
 		{
 			printf("\n");
 			break;
-		} if_args(args);
+		}
+
+		if_args(args);
 		free_mal(args, command);
-	} return (EXIT_SUCCESS);
+	}
+
+	return (EXIT_SUCCESS);
 }
+
