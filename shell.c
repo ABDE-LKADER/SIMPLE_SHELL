@@ -3,9 +3,6 @@
 /**
  * main -> Main function
  *
- * @argc: Number of arguments
- * @argv: Arguments
- *
  * Return: 0
  */
 
