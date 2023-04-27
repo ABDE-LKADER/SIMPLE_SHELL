@@ -1,20 +1,56 @@
-#ifndef SIMPLE_SHELL_H
-#define SIMPLE_SHELL_H
+#ifndef SHELL_H
+#define SHELL_H
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/types.h>
+#include <errno.h>
+#include <stddef.h>
+#include <sys/stat.h>
+#include <signal.h>
 
-#define PROMPT "#cisfun$ "
-#define MAX_INPUT 1024
+extern char **environ;
 
-void print_prompt(void);
-char *read_line(void);
-char **split_line(char *line);
-int execute_command(char **args);
-void free_args(char **args);
+int _putchar(char c);
+void _puts(char *str);
+int _strlen(char *s);
+char *_strdup(char *str);
+char *concat_all(char *name, char *sep, char *value);
+
+/**
+ * struct list_path -> linked list
+ * @dir: Directory
+ * @p: Pointer
+ */
+
+typedef struct list_path
+{
+	char *dir;
+	struct list_path *p;
+} list_path;
+
+/**
+ * struct mybuild -> buildin command
+ * @name: Name CMD
+ * @func: Function
+ */
+
+typedef struct mybuild
+{
+	char *name;
+	void (*func)(char **);
+} mybuild;
+
+char **splitstring(char *str, const char *delim);
+void execute(char **argv);
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+
+char *get_env(const char *name);
+list_path *add_node_end(list_path **head, char *str);
+list_path *linkpath(char *path);
+char *_which(char *filename, list_path *head);
 
 #endif
