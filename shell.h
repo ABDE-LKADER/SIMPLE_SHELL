@@ -1,24 +1,20 @@
-#ifndef SHELL_H
-#define SHELL_H
+#ifndef SIMPLE_SHELL_H
+#define SIMPLE_SHELL_H
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
 #include <sys/wait.h>
 
-#define BUFFER_SIZE 1024
+#define PROMPT "#cisfun$ "
 #define MAX_INPUT 1024
-#define MAXARGS 10
-#define DELIM " \t\r\n\a"
 
-void put_string(char *str);
-char **re_alloc(char **ptr, unsigned int size);
-char *str_tok(char *str, char *delim);
-
-void shell_loop(void);
+void print_prompt(void);
 char *read_line(void);
 char **split_line(char *line);
-int execute(char **args);
+int execute_command(char **args);
+void free_args(char **args);
 
 #endif

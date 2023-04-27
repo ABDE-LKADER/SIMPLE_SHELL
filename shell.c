@@ -1,17 +1,25 @@
 #include "shell.h"
 
 /**
- * main -> Entry point
+ * main -> Simple shell
  *
- * @argc: Number of arguments
- * @argv: Arguments
- * @envp: Environment
- *
- * Return: EXIT_SUCCESS
+ * Return: Depend Condition
 */
 
-int main(int argc, char **argv, char **envp)
+int main(void)
 {
-	shell_loop();
+	char *line;
+	char **args;
+	int status;
+
+	do {
+		print_prompt();
+		line = read_line();
+		args = split_line(line);
+		status = execute_command(args);
+		free(line);
+		free_args(args);
+	} while (status);
+
 	return (EXIT_SUCCESS);
 }

@@ -1,15 +1,15 @@
 #include "shell.h"
 
 /**
- * read_line -> Read a line from stdin
+ * read_line -> Read line
  *
- * Return: Line
-*/
+ * Return: Depend Condition
+ */
 
 char *read_line(void)
 {
 	char *line = NULL;
-	ssize_t bufsize = 0;
+	size_t bufsize = 0;
 
 	getline(&line, &bufsize, stdin);
 	return (line);

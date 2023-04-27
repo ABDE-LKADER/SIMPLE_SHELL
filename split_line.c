@@ -1,41 +1,38 @@
 #include "shell.h"
 
 /**
- * split_line -> Split a line into tokens
+ * split_line -> Split line
  *
- * @line: line
+ * @line: Line
  *
  * Return: Tokens
 */
 
 char **split_line(char *line)
 {
-	int bufsize = MAXARGS, position = 0;
-	char **tokens = malloc(bufsize * sizeof(char *));
-	char *token;
+	char **tokens = NULL;
+	char *token = NULL;
+	int i = 0;
 
-	if (!tokens)
+	tokens = malloc(sizeof(char *) * 2);
+	if (tokens == NULL)
 	{
-		put_string("allocation error\n");
+		perror("malloc");
 		exit(EXIT_FAILURE);
-	}
-
-	token = str_tok(line, DELIM);
+	} token = strtok(line, " \n");
 	while (token != NULL)
 	{
-		tokens[position] = token;
-		position++;
-
-		if (position >= bufsize)
+		tokens[i] = token;
+		i++;
+		if (i >= 2)
 		{
-			bufsize += MAXARGS;
-			tokens = re_alloc(tokens, bufsize * sizeof(char *));
-			if (!tokens)
+			tokens = realloc(tokens, sizeof(char *) * (i + 1));
+			if (tokens == NULL)
 			{
-				put_string("allocation error\n");
+				perror("realloc");
 				exit(EXIT_FAILURE);
 			}
-		} token = str_tok(NULL, DELIM);
-	} tokens[position] = NULL;
+		} token = strtok(NULL, " \n");
+	} tokens[i] = NULL;
 	return (tokens);
 }
