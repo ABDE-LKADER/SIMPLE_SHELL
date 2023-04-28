@@ -1,0 +1,13 @@
+#!/bin/bash
+
+while true; do
+    read -p "#cisfun$ " input
+    case $input in
+        "exit")
+            exit 0
+            ;;
+        *)
+            eval $input
+            ;;
+    esac
+done
