@@ -8,43 +8,42 @@
 
 int main(void)
 {
-	char *input = NULL, *path = NULL, *command = NULL, **args = NULL;
-	size_t in_size = 0;
+	char *input = NULL, **args = NULL;
+	size_t size = 0;
 	ssize_t in_len = 0;
+	struct stat st;
 	list_path *list = NULL;
-	void (*command_func)(char **);
 
+	check_terminal();
 	signal(SIGINT, handle_signal);
-	while (in_len != EOF)
+	while (1)
 	{
-		check_terminal();
-		in_len = get_input(&input, &in_size);
-		handle_eof(in_len, input);
-		args = split_input(input, " \n");
-		if (!args || !args[0])
+		if (isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, "$ ", 2);
+		in_len = get_input(&input, &size);
+		if (in_len == EOF)
+			handle_eof(in_len, input);
+		if (in_len == 1)
+		{
+			free(input);
+			continue;
+		}
+		args = split_input(input, " \n\t\r");
+		if (!args)
+		{
+			free(input);
+			continue;
+		}
+		if (stat(args[0], &st) == 0)
 			execute_command(args);
 		else
 		{
-			path = get_env("PATH");
-			list = link_path(path);
-			command = find_command(args[0], list);
-			command_func = get_func(args);
-			if (command_func)
-			{
-				free(input);
-				command_func(args);
-			}
-			else if (!command)
-				execute_command(args);
-			else if (command)
-			{
-				free(args[0]);
-				args[0] = command;
-				execute_command(args);
-			}
+			list = link_path(get_env("PATH"));
+			execute_command(args);
+			free_list(list);
 		}
-	} free_list(list);
-	free_args(args);
-	free(input);
+		free_args(args);
+		free(input);
+	}
 	return (0);
 }
