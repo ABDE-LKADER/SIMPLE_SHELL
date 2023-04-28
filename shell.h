@@ -3,54 +3,62 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <errno.h>
-#include <stddef.h>
-#include <sys/stat.h>
+#include <unistd.h>
 #include <signal.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
 
 extern char **environ;
 
-int _putchar(char c);
-void _puts(char *str);
+char *_strcat(char *dest, char *src);
+int _strcmp(char *s1, char *s2);
 int _strlen(char *s);
-char *_strdup(char *str);
-char *concat_all(char *name, char *sep, char *value);
+char *_strcpy(char *dest, char *src);
+int _atoi(char *s);
 
 /**
- * struct list_path -> linked list
+ * list_path -> Struct To Store Path
  * @dir: Directory
- * @p: Pointer
+ * @next: Pointer To Next Node
  */
 
 typedef struct list_path
 {
-	char *dir;
-	struct list_path *p;
+    char *dir;
+    struct list_path *next;
 } list_path;
 
+void cd_func(char **args);
+void setenv_func(char **args);
+void unsetenv_func(char **args);
+void env_func(char **args);
+void exit_func(char **args);
+
+
 /**
- * struct mybuild -> buildin command
- * @name: Name CMD
+ * builtin_t -> Struct To Store Builtins
+ * @name: Name
  * @func: Function
  */
 
-typedef struct mybuild
+typedef struct builtin
 {
-	char *name;
-	void (*func)(char **);
-} mybuild;
+    char *name;
+    void (*func)(char **);
+} builtin_t;
 
-char **splitstring(char *str, const char *delim);
-void execute(char **argv);
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
-
-char *get_env(const char *name);
-list_path *add_node_end(list_path **head, char *str);
-list_path *linkpath(char *path);
-char *_which(char *filename, list_path *head);
+void handle_signal(int sig);
+void check_terminal(void);
+ssize_t get_input(char **input, size_t *size);
+void handle_eof(ssize_t in_len, char *input);
+char **split_input(char *input, char *delim);
+char *get_env(char *var);
+list_path *link_path(char *path);
+char *find_command(char *command, list_path *list);
+void (*get_func(char **args))(char **);
+void execute_command(char **args);
+void free_list(list_path *list);
+void free_args(char **args);
 
 #endif
